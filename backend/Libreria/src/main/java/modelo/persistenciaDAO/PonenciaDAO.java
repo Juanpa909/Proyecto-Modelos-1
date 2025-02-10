@@ -14,7 +14,7 @@ import modelo.persistencia.ConexionDB;
 public class PonenciaDAO implements DAO<PonenciaDTO>{
 
 	@Override
-	public void crear(PonenciaDTO ponencia) throws SQLException {
+	public int crear(PonenciaDTO ponencia) throws SQLException {
 		String sql = "INSERT INTO ponencia (congreso, isbn, documento) VALUES (?, ?, ?)";
 		try(Connection conexion = ConexionDB.getInstance().getConnection();
 			PreparedStatement pstmt = conexion.prepareStatement(sql)){
@@ -23,14 +23,10 @@ public class PonenciaDAO implements DAO<PonenciaDTO>{
 			pstmt.setInt(3, 4);
 			pstmt.executeUpdate();
 			
+			return ponencia.getIdDocumento();
 		}
 	}
 
-	@Override
-	public PonenciaDTO buscarPorNombre(String nombre) throws SQLException {
-		// Aqui va la logica para ponencias
-		return null;
-	}
 
 	@Override
 	public void eliminarPorID(int id) throws SQLException {
@@ -79,9 +75,9 @@ public class PonenciaDAO implements DAO<PonenciaDTO>{
 	            pstmtDocumento.setString(5, ponencia.getMesPublicacion());
 	            pstmtDocumento.setString(6, ponencia.getEditorial());
 	            pstmtDocumento.setString(7, ponencia.getEstado());
-	            pstmtDocumento.setInt(8, Integer.parseInt(ponencia.getPropietario()));
+	            pstmtDocumento.setString(8, ponencia.getPropietario());
 	            pstmtDocumento.setInt(9, ponencia.getIdDocumento());
-	            pstmtDocumento.executeUpdate();
+	            pstmtDocumento.setString(10, ponencia.getTipo());	            pstmtDocumento.executeUpdate();
 	            
 	            pstmtPonencia.setString(1, ponencia.getCongreso());
 	            pstmtPonencia.setString(2, ponencia.getIsbn());

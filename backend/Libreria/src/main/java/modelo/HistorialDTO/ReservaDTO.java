@@ -1,4 +1,4 @@
-package modelo.OtrosDTO;
+package modelo.HistorialDTO;
 
 import java.io.Serializable;
 

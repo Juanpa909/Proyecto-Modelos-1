@@ -2,20 +2,14 @@ package modelo.persistenciaDAO;
 
 import java.sql.SQLException;
 
-import modelo.OtrosDTO.ReservaDTO;
+import modelo.HistorialDTO.ReservaDTO;
 
 public class ReservaDAO implements DAO<ReservaDTO> {
 
 	@Override
-	public void crear(ReservaDTO DTO) throws SQLException {
+	public int crear(ReservaDTO DTO) throws SQLException {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ReservaDTO buscarPorNombre(String nombre) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return 0; 
 	}
 
 	@Override

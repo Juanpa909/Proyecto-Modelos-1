@@ -11,26 +11,26 @@ import java.text.SimpleDateFormat;
 import modelo.DocumentoDTO.ArticuloDTO;
 import modelo.persistencia.ConexionDB;
 
-public class ArticuloDAO{
+public class ArticuloDAO implements DAO<ArticuloDTO>{
 
-	
-	public void crear(ArticuloDTO articulo) throws SQLException {
+	@Override
+	public int crear(ArticuloDTO articulo) throws SQLException {
 		String sql = "INSERT INTO articulo (ssn, documento) VALUES (?, ?)";
 		try(Connection conexion = ConexionDB.getInstance().getConnection();
 			PreparedStatement pstmt = conexion.prepareStatement(sql)){
 			pstmt.setString(1, articulo.getSsn());
-			pstmt.setInt(2, 4);
+			pstmt.setInt(2, articulo.getIdDocumento());
 			pstmt.executeUpdate();
+			
+			return articulo.getIdDocumento(); 
 		}
 	}
 
 	
-	public ArticuloDTO buscarPorNombre(String nombre) throws SQLException{
-		//Aqui ponemos la logica
-		return null;
-	}
 
-	
+
+	@Override
+
 	public void eliminarPorID(int id) throws SQLException {
 	    String sqlArticulo = "DELETE FROM articulo WHERE idarticulo = ?";
 	    String sqlDocumento = "DELETE FROM documento WHERE iddocumento = " +
@@ -57,7 +57,8 @@ public class ArticuloDAO{
 	}
 
 
-	
+	@Override
+
 	public void actualizar(ArticuloDTO articulo) throws SQLException {
 	    String sqlDocumento = "UPDATE documento SET titulo = ?, fechapublicacion = ?, autores = ?, diapublicacion = ?, " +
 	                           "mespublicacion = ?, editorial = ?, estado = ?, propietario = ? WHERE iddocumento = ?";
@@ -78,8 +79,9 @@ public class ArticuloDAO{
 	            pstmtDocumento.setString(5, articulo.getMesPublicacion());
 	            pstmtDocumento.setString(6, articulo.getEditorial());
 	            pstmtDocumento.setString(7, articulo.getEstado());
-	            pstmtDocumento.setInt(8, Integer.parseInt(articulo.getPropietario()));
+	            pstmtDocumento.setString(8, articulo.getPropietario());
 	            pstmtDocumento.setInt(9, articulo.getIdDocumento());
+	            pstmtDocumento.setString(10, articulo.getTipo());
 	            pstmtDocumento.executeUpdate();
 
 	            // 2️⃣ Luego, actualizar el Artículo
@@ -94,7 +96,6 @@ public class ArticuloDAO{
 	    }
 	}
 
-
     public static Date convertirStringADate(String fechaStr) {
         try {
             SimpleDateFormat formato = new SimpleDateFormat("d/M/yyyy"); // Define el formato esperado
@@ -105,7 +106,8 @@ public class ArticuloDAO{
             return null; // Manejo de error: Devuelve null si hay un fallo
         }
     }
-
+    
+	@Override
 	public ArticuloDTO buscarPorId(int id) throws SQLException {
 	    String sql = "SELECT a.idarticulo, a.ssn, " +
 	                 "d.iddocumento, d.titulo, d.fechapublicacion, d.autores, " +
@@ -137,6 +139,15 @@ public class ArticuloDAO{
 	    }
 	    return null;
 	}
+
+
+
+
+
+
+
+
+
 
 
 }

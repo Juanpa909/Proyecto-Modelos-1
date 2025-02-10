@@ -11,24 +11,21 @@ import java.text.SimpleDateFormat;
 import modelo.DocumentoDTO.LibroDTO;
 import modelo.persistencia.ConexionDB;
 
-public class LibroDAO{
+public class LibroDAO implements DAO<LibroDTO>{
 
-	public void crear(LibroDTO libro) throws SQLException {
+	public int crear(LibroDTO libro) throws SQLException {
 		String sql = "INSERT INTO libro (numeropaginas, isbn, documento) VALUES (?, ?, ?)";
 		try(Connection conexion = ConexionDB.getInstance().getConnection();
 			PreparedStatement pstmt = conexion.prepareStatement(sql)){
 			pstmt.setInt(1, Integer.parseInt(libro.getNumeroPaginas()));
 			pstmt.setString(2, libro.getIsbn());
-			pstmt.setInt(3, 4);
+			pstmt.setInt(3, libro.getIdDocumento());
 			pstmt.executeUpdate();
+			
+			return libro.getIdDocumento(); 
 		}
 	}
 	
-
-	public LibroDTO buscarPorNombre(String nombre) throws SQLException{
-		// Aqui va la logica para Libros
-		return null;
-	}
 
 	public void eliminarPorID(int id) throws SQLException {
 	    String sqlLibro = "DELETE FROM libro WHERE idlibro = ?";
@@ -58,7 +55,7 @@ public class LibroDAO{
 
 	public void actualizar(LibroDTO libro) throws SQLException {
 	    String sqlDocumento = "UPDATE documento SET titulo = ?, fechapublicacion = ?, autores = ?, diapublicacion = ?, " +
-	                           "mespublicacion = ?, editorial = ?, estado = ?, propietario = ? WHERE iddocumento = ?";
+	                           "mespublicacion = ?, editorial = ?, estado = ?, propietario = ?, tipo=? WHERE iddocumento = ?";
 	    
 	    String sqlLibro = "UPDATE libro SET isbn = ?, numeropaginas = ? WHERE idlibro = ?";
 
@@ -75,8 +72,9 @@ public class LibroDAO{
 	            pstmtDocumento.setString(5, libro.getMesPublicacion());
 	            pstmtDocumento.setString(6, libro.getEditorial());
 	            pstmtDocumento.setString(7, libro.getEstado());
-	            pstmtDocumento.setInt(8, Integer.parseInt(libro.getPropietario()));
+	            pstmtDocumento.setString(8, libro.getPropietario());
 	            pstmtDocumento.setInt(9, libro.getIdDocumento());
+	            pstmtDocumento.setString(10, libro.getTipo());
 	            pstmtDocumento.executeUpdate();
 
 	            pstmtLibro.setString(1, libro.getIsbn());

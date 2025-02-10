@@ -9,7 +9,7 @@ public class UsuarioDAO{
 	
 	
 	public void crear(UsuarioDTO usuario) throws SQLException{
-		String sql = "INSERT INTO usuario (nombre, contrasena, correoelectronico, direccionfisica, numerotelefonico, tipo) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO usuario (nombre, contrasena, correoelectronico, direccionfisica, numerotelefonico) VALUES (?, ?, ?, ?, ?)";
 		try(Connection conexion = ConexionDB.getInstance().getConnection();
 				PreparedStatement pstmt = conexion.prepareStatement(sql)){
 			pstmt.setString(1, usuario.getNombre());
@@ -17,7 +17,6 @@ public class UsuarioDAO{
 			pstmt.setString(3, usuario.getCorreoElectronico());
 			pstmt.setString(4, usuario.getDireccionFisica());
 			pstmt.setString(5, usuario.getNumeroTelefonico());
-			pstmt.setString(6, "Usuario");
 			pstmt.executeUpdate();
 		}
 	}

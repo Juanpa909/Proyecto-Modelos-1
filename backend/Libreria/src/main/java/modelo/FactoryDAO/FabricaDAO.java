@@ -28,28 +28,4 @@ public class FabricaDAO implements DAOFactory{
 		return ponenciaDAO;
 	}
 
-	@Override
-	public DocumentoDAO crearDocumento() {
-		DocumentoDAO documentoDAO = new DocumentoDAO(); 
-		return documentoDAO;
-	}
-
-	@Override
-	public ReservaDAO crearReserva() {
-		ReservaDAO reservaDAO = new ReservaDAO(); 
-		return reservaDAO;
-	}
-
-	@Override
-	public EventoDAO crearEvento() {
-		EventoDAO eventoDAO = new EventoDAO(); 
-		return eventoDAO;
-	}
-
-	@Override
-	public UsuarioDAO crearUsuario() {
-		UsuarioDAO usuarioDAO = new UsuarioDAO(); 
-		return usuarioDAO;
-	}
-
 }

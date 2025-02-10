@@ -2,9 +2,12 @@ package Prueba;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 import java.sql.Date;
 
 import modelo.DocumentoDTO.PonenciaDTO;
+import modelo.HistorialDTO.EventoDTO;
 
 import java.sql.SQLException;
 
@@ -15,52 +18,30 @@ import modelo.persistencia.UsuarioDAO;
 import modelo.persistencia.UsuarioDTO;
 import modelo.persistenciaDAO.ArticuloDAO;
 import modelo.persistenciaDAO.DocumentoDAO;
+import modelo.persistenciaDAO.EventoDAO;
 import modelo.persistenciaDAO.LibroDAO;
 import modelo.persistenciaDAO.PonenciaDAO;
+
+import java.util.Iterator; 
 
 public class ApiMain {
 
 	public static void main(String[] args) throws SQLException {
-
+		System.out.println("Hola mundo");
+		
 		//Prueba metodos de usuario
-		UsuarioDAO dao = new UsuarioDAO(); 
-		UsuarioDTO user2 = dao.buscarPorId(1); 
-		System.out.println(user2.toString());
+		UsuarioDTO usuario = new UsuarioDTO.Builder()
+				.setNombre("Henry Jhonmarcos")
+				.setNumeroTelefonico("3453523")
+				.setDireccionFisica("Calle 150")
+				.setCorreoElectronico("hent23ysd@asds")
+				.setContrasena("Mkasdi")
+				.build();
+		
+		
 		
 		//Prueba metodos de documento
-		DocumentoDAO dao3 = new DocumentoDAO(); 
-		DocumentoDTO doc1 = dao3.buscarPorId(4);
-		System.out.println(doc1.toString());
-		
-		//Prueba libro
-		LibroDAO dao4 = new LibroDAO(); 
-		LibroDTO doc2 = dao4.buscarPorId(1);
-		System.out.println(doc2.toString());
-		
-		//Prueba articulo
-		ArticuloDAO dao5 = new ArticuloDAO(); 
-		ArticuloDTO doc3 = dao5.buscarPorId(1);
-		System.out.println(doc3.toString());
-		
-		//Prueba ponencia
-		PonenciaDAO dao6 = new PonenciaDAO(); 
-		PonenciaDTO doc4 = dao6.buscarPorId(1);
-		System.out.println(doc4.toString());
-		
-		ArticuloDTO articulo = new ArticuloDTO.BuilderArticulo()
-				.setIdDocumento(4)
-				.setAutores("Nikokado - Hendich")
-				.setDiaPublicacion("Lunes")
-				.setEditorial("Colimun")
-				.setIdArticulo(1)
-				.build(); 
-		
-		dao5.actualizar(articulo);
-		System.out.println(articulo.toString());
-		
-		/*
-		documento = new DocumentoDTO.BuilderDoc()
-				.setIdDocumento(12)
+		DocumentoDTO documento = new DocumentoDTO.BuilderDoc()
 				.setAutores("Fantastico Señor zorro")
 				.setDiaPublicacion("Martes")
 				.setEditorial("Colimu12n")
@@ -68,85 +49,44 @@ public class ApiMain {
 				.setFechaPublicacion("2/2/2023")
 				.setMesPublicacion("Junio")
 				.setTitulo("Mr and Mss fox")
-				.build();
-		*/
-		/*
-		UsuarioDTO usuario = new UsuarioDTO.Builder()
-				.setNombre("Henry Jhonmarcos")
-				.setNumeroTelefonico("3453523")
-				.setDireccionFisica("Calle 150")
-				.setCorreoElectronico("hent23ysd@asds")
-				.setContrasena("Mkasdi")
-				.setId(15) //Pilas, el id debe coincidir en la BD
+				.setTipo("Libro")
+				.setPropietario(usuario.getNombre())
 				.build();
 	
-		UsuarioDAO dao = new UsuarioDAO(); 
-		dao.actualizar(usuario);
-	
-		
-		DocumentoDTO documento = new DocumentoDTO.BuilderDoc()
-				.setIdDocumento(12)
-				.setAutores("Nikokado - Hendich")
-				.setDiaPublicacion("Lunes")
-				.setEditorial("Colimun")
-				.setEstado("En reserva")
-				.setFechaPublicacion("2/2/2023")
-				.setMesPublicacion("Marzo")
-				.setTitulo("LulYeah")
+		DocumentoDAO dao3 = new DocumentoDAO(); 
+
+		EventoDTO evento = new EventoDTO.BuilderEvento()
+				.setTipoEvento("Dado de baja")
+				.setDocumento("2")
+				.setUsuario(usuario.getNombre())
 				.build(); 
+				
+		EventoDAO dao4 = new EventoDAO(); 
 		
-		DocumentoDAO dao2 = new DocumentoDAO();
-		dao2.crear(documento); 
+		//dao4.crear(evento);
+		
+		/*	
+		List<Map<Integer, String>> resultados = dao3.buscarPorNombre("Mr");
+		if (!resultados.isEmpty()) {
+		    resultados.forEach(map -> {
+		        Integer id = map.keySet().iterator().next();
+		        String titulo = map.values().iterator().next();
+		        
+		        System.out.println("ID: " + id);
+		        System.out.println("Título: " + titulo);
+		    });
+		} else {
+		    System.out.println("No se encontraron documentos.");
+		}
 	*/
-	/*
-		PonenciaDTO ponencia = new PonenciaDTO.BuilderPonencia()
-				.setIdDocumento(12)
-				.setAutores("Nikokado - Hendich")
-				.setDiaPublicacion("Lunes")
-				.setEditorial("Colimun")
-				.setEstado("En reserva")
-				.setFechaPublicacion("2/2/2023")
-				.setMesPublicacion("Marzo")
-				.setTitulo("LulYeah")
-				.setIsbn("asdasdsd")
-				.setCongreso("De la repiblica")
-				.setIdDocumento(0)
-				.build(); 
+		List<String> eventos = dao4.buscarPorDocumento(2);
 		
-		PonenciaDAO dao3 = new PonenciaDAO();
-		dao3.crear(ponencia);
-	*/
-	/*	ArticuloDTO articulo = new ArticuloDTO.BuilderArticulo()
-				.setIdDocumento(12)
-				.setAutores("Nikokado - Hendich")
-				.setDiaPublicacion("Lunes")
-				.setEditorial("Colimun")
-				.setEstado("En reserva")
-				.setFechaPublicacion("2/2/2023")
-				.setMesPublicacion("Marzo")
-				.setTitulo("LulYeah")
-				.setSsn("a125215")
-				.build(); 
-		
-		ArticuloDAO dao4 = new ArticuloDAO();
-		dao4.crear(articulo);	
-		*/
-		/*
-		LibroDTO libro = new LibroDTO.BuilderLibro()
-				.setIdDocumento(12)
-				.setAutores("Nikokado - Hendich")
-				.setDiaPublicacion("Lunes")
-				.setEditorial("Colimun")
-				.setEstado("En reserva")
-				.setFechaPublicacion("2/2/2023")
-				.setMesPublicacion("Marzo")
-				.setTitulo("LulYeah")
-				.setNumeroPaginas("12")
-				.setIsbn("asdas")
-				.build(); 
-		
-		LibroDAO dao5 = new LibroDAO();
-		dao5.crear(libro);
-		*/
+		Iterator<String> iterador = eventos.iterator(); 
+		while(iterador.hasNext()) {
+			String registro = iterador.next(); 
+			System.out.println(registro);
+		}
+
+
 	} 
 }

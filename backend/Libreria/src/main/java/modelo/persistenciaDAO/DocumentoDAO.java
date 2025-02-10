@@ -7,15 +7,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import modelo.DocumentoDTO.DocumentoDTO;
 import modelo.persistencia.ConexionDB;
 
-public class DocumentoDAO{
+public class DocumentoDAO implements DAO<DocumentoDTO>{
 
 	public int crear(DocumentoDTO documento) throws SQLException {
 		
-		String sql = "INSERT INTO documento (titulo, fechapublicacion, autores, diapublicacion ,mespublicacion , editorial, estado, propietario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO documento (titulo, fechapublicacion, autores, diapublicacion ,mespublicacion , editorial, estado, propietario, tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
 		try(Connection conexion = ConexionDB.getInstance().getConnection();
 				PreparedStatement pstmt = conexion.prepareStatement(sql)){
 			pstmt.setString(1, documento.getTitulo());
@@ -25,7 +29,8 @@ public class DocumentoDAO{
 			pstmt.setString(5, documento.getMesPublicacion());
 			pstmt.setString(6, documento.getEditorial());
 			pstmt.setString(7, documento.getEstado());
-			pstmt.setInt(8, 11);
+			pstmt.setString(8, documento.getPropietario());
+			pstmt.setString(9, documento.getTipo());
 			pstmt.executeUpdate();
 			int affectedRows = pstmt.executeUpdate();
 	        
@@ -40,11 +45,26 @@ public class DocumentoDAO{
 	    return -1;
 }
 	
+	public List<Map<Integer, String>> buscarPorNombre(String nombre) throws SQLException {
+	    String sql = "SELECT iddocumento, UPPER(titulo) AS titulo FROM documento WHERE UPPER(titulo) LIKE ?";
+	    List<Map<Integer, String>> listaResultados = new ArrayList<>();
 
-	public DocumentoDTO buscarPorNombre(String nombre) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	    try (Connection conn = ConexionDB.getInstance().getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	        pstmt.setString(1, "%" + nombre.toUpperCase() + "%"); // Buscar coincidencias parciales en mayúsculas
+
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                Map<Integer, String> resultado = new HashMap<>();
+	                resultado.put(rs.getInt("iddocumento"), rs.getString("titulo"));
+	                listaResultados.add(resultado);
+	            }
+	        }
+	    }
+	    return listaResultados;
 	}
+
 
 	public void eliminarPorID(int id) throws SQLException {
 	    String sql = "DELETE FROM documento WHERE iddocumento = ?";
@@ -57,7 +77,7 @@ public class DocumentoDAO{
 
 	public void actualizar(DocumentoDTO documento) throws SQLException {
 	    String sql = "UPDATE documento SET titulo = ?, fechapublicacion = ?, autores = ?, diapublicacion = ?, " +
-	                 "mespublicacion = ?, editorial = ?, estado = ?, propietario = ? WHERE iddocumento = ?";
+	                 "mespublicacion = ?, editorial = ?, estado = ?, propietario = ?, tipo = ? WHERE iddocumento = ?";
 	    
 	    try (Connection conn = ConexionDB.getInstance().getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -69,9 +89,10 @@ public class DocumentoDAO{
 	        pstmt.setString(5, documento.getMesPublicacion());
 	        pstmt.setString(6, documento.getEditorial());
 	        pstmt.setString(7, documento.getEstado());
-	        pstmt.setInt(8, Integer.parseInt(documento.getPropietario()));
+	        pstmt.setString(8, documento.getPropietario());
 	        pstmt.setInt(9, documento.getIdDocumento()); // Se usa el ID del objeto DTO
-			pstmt.executeUpdate();
+			pstmt.setString(10, documento.getTipo());
+	        pstmt.executeUpdate();
 	    }
 	}
 
@@ -111,6 +132,7 @@ public class DocumentoDAO{
         }
         return null;
     }
+
 
 
 

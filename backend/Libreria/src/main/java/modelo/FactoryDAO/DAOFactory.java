@@ -13,9 +13,5 @@ public interface DAOFactory {
 	LibroDAO crearLibro(); 
 	PonenciaDAO crearPonencia(); 
 	ArticuloDAO crearArticulo();
-	DocumentoDAO crearDocumento();
-	ReservaDAO crearReserva();
-	EventoDAO crearEvento();
-	UsuarioDAO crearUsuario();
 
 }
